@@ -1,0 +1,50 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# AI Training outputs
+*.pth
+*.pt
+*.ckpt
+*.log
+training_logs/
+checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+venv/
+env/
+ENV/
+
+# System
+Thumbs.db
+desktop.ini
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Generated files
+cartpole.so
+cartpole.pyd
+

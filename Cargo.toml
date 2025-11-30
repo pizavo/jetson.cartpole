@@ -1,0 +1,23 @@
+[package]
+name = "cartpole"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "cartpole_lib"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "cartpole"
+path = "src/main.rs"
+
+[dependencies]
+ggez = "0.9.3"
+rand = "0.9.2"
+pyo3 = { version = "0.27.2", features = ["extension-module"], optional = true }
+serde = { version = "1.0", features = ["derive"] }
+
+[features]
+default = []
+python = ["pyo3"]
