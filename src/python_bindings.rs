@@ -1,7 +1,5 @@
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
-#[cfg(feature = "python")]
-use pyo3::types::PyList;
 use crate::cartpole::CartPoleEnv;
 
 /// Python wrapper for CartPole environment

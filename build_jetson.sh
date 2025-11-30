@@ -1,16 +1,28 @@
 #!/bin/bash
-# Build script for Jetson Nano deployment
-
-# Force PyO3 to use Python 3.8 (not 3.6)
-if command -v python3.8 &> /dev/null; then
-    export PYO3_PYTHON=$(which python3.8)
-    export PYTHONPATH="/mnt/microsd/python-packages/lib/python3.8/site-packages:$PYTHONPATH"
-fi
+# DEPRECATED: This script has been split into separate components
+# Use build_all.sh instead for complete setup
 
 echo "=========================================="
-echo "CartPole - Jetson Nano Build Script"
+echo "⚠️  NOTICE: Script Split"
 echo "=========================================="
 echo ""
+echo "This script has been split into:"
+echo "  • build_rust.sh    - Build Rust components"
+echo "  • setup_python.sh  - Set up Python environment"
+echo "  • build_all.sh     - Run both (recommended)"
+echo ""
+echo "Running build_all.sh for you..."
+echo ""
+
+# Run the new master script
+if [ -f "build_all.sh" ]; then
+    chmod +x build_all.sh
+    exec ./build_all.sh
+else
+    echo "✗ Error: build_all.sh not found"
+    echo "  Make sure you have all the new scripts"
+    exit 1
+fi
 
 # Check if running on Jetson (ARM architecture)
 ARCH=$(uname -m)
