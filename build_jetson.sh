@@ -57,14 +57,16 @@ if command -v python3 &> /dev/null; then
 
     # Check python3-config (what PyO3 actually uses)
     if command -v python3-config &> /dev/null; then
-        PY_CONFIG_VERSION=$(python3-config --prefix | xargs -I {} {}/bin/python3 --version 2>&1 || echo "unknown")
-        echo "  Note: python3-config points to: $PY_CONFIG_VERSION"
+        PY_CONFIG_PREFIX=$(python3-config --prefix 2>/dev/null || echo "unknown")
+        echo "  Note: python3-config prefix: $PY_CONFIG_PREFIX"
     fi
 
-    # Force PyO3 to use python3.8
+    # Force PyO3 to use python3.8 (override python3-config)
     if command -v python3.8 &> /dev/null; then
         export PYO3_PYTHON=$(which python3.8)
-        echo "  ✓ PYO3_PYTHON set to: $PYO3_PYTHON"
+        echo "  ✓ PYO3_PYTHON set to: $PYO3_PYTHON (will override python3-config)"
+    else
+        echo "  ⚠ Warning: python3.8 not found, PyO3 may use wrong Python version"
     fi
 else
     echo "✗ Error: Python3 not found"

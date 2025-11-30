@@ -26,15 +26,23 @@ echo "export PYO3_PYTHON=$PYO3_PYTHON" >> ~/.bashrc
 echo "✓ Added to ~/.bashrc"
 echo ""
 
+# Install python3.8-dev if not already installed
+if ! dpkg -l | grep -q python3.8-dev; then
+    echo "Installing python3.8-dev..."
+    sudo apt-get update
+    sudo apt-get install -y python3.8-dev
+fi
+
 # Update alternatives for python3-config
 if [ -f "/usr/bin/python3.8-config" ]; then
     echo "Setting up python3-config alternatives..."
+    sudo update-alternatives --install /usr/bin/python3-config python3-config /usr/bin/python3.6-config 1 2>/dev/null || true
     sudo update-alternatives --install /usr/bin/python3-config python3-config /usr/bin/python3.8-config 2
     sudo update-alternatives --set python3-config /usr/bin/python3.8-config
     echo "✓ python3-config now points to Python 3.8"
 else
-    echo "⚠ python3.8-config not found, installing..."
-    sudo apt-get install -y python3.8-dev
+    echo "✗ python3.8-config not found even after installation"
+    echo "  Continuing anyway - PYO3_PYTHON environment variable will handle this"
 fi
 
 echo ""
