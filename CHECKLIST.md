@@ -66,7 +66,17 @@ chmod +x build_jetson.sh
 ### 5. Install Python Dependencies
 
 ```bash
-python3 -m pip install numpy --user
+# Install system packages first (avoids building from source)
+sudo apt-get install -y python3-numpy python3-dev libopenblas-base libopenmpi-dev
+
+# Install to user location (microSD if PYTHONUSERBASE is set)
+python3 -m pip install --user numpy
+```
+
+**If NumPy fails with Cython error:**
+```bash
+python3 -m pip install --user Cython
+python3 -m pip install --user numpy --no-cache-dir
 ```
 
 **Expected:** NumPy installed successfully
@@ -223,6 +233,13 @@ sudo tegrastats
 - [ ] Check disk space: `df -h`
 - [ ] Update system: `sudo apt-get update && sudo apt-get upgrade`
 - [ ] Install build tools: `sudo apt-get install build-essential`
+
+### NumPy Installation Fails (Cython error)
+
+- [ ] Install system NumPy first: `sudo apt-get install python3-numpy libopenblas-base`
+- [ ] Install Cython: `python3 -m pip install --user Cython`
+- [ ] Retry NumPy: `python3 -m pip install --user numpy --no-cache-dir`
+- [ ] OR use system NumPy (already available via apt)
 
 ## Success Criteria
 

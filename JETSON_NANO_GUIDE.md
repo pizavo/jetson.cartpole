@@ -175,14 +175,18 @@ python3 -m pip install --user numpy
 **OR** for standard installation:
 
 ```bash
-# Install pip for Python 3
-sudo apt-get install -y python3-pip python3-dev
+# Install system packages (provides pre-built binaries)
+sudo apt-get install -y python3-pip python3-dev python3-numpy libopenblas-base libopenmpi-dev
 
 # Upgrade pip (use --user to avoid permission issues)
 python3 -m pip install --upgrade pip --user
 
-# Install NumPy
+# Install NumPy to user location
 python3 -m pip install numpy --user
+
+# If NumPy fails to build (Cython error):
+python3 -m pip install --user Cython
+python3 -m pip install --user numpy --no-cache-dir
 ```
 
 **Note:** Use `python3 -m pip` instead of `pip3` to avoid wrapper issues.

@@ -107,7 +107,18 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo ""
     echo "Installing Python dependencies to $PYTHONUSERBASE..."
     mkdir -p "$PYTHONUSERBASE"
-    python3 -m pip install --user numpy
+
+    # Install system packages first (avoids building from source)
+    echo "Installing system Python packages..."
+    sudo apt-get install -y python3-numpy python3-dev libopenblas-base libopenmpi-dev
+
+    # Install to user location
+    echo "Installing NumPy to user location..."
+    python3 -m pip install --user numpy || {
+        echo "NumPy installation failed, trying with Cython..."
+        python3 -m pip install --user Cython
+        python3 -m pip install --user numpy --no-cache-dir
+    }
 
     echo ""
     echo "Would you like to install PyTorch for Jetson? (y/n)"
