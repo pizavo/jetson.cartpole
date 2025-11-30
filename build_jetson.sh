@@ -106,7 +106,7 @@ read -r response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo ""
     echo "Installing Python dependencies..."
-    pip3 install numpy
+    python3 -m pip install numpy --user
 
     echo ""
     echo "Would you like to install PyTorch for Jetson? (y/n)"
@@ -118,7 +118,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         echo ""
         echo "Quick install (for JetPack 4.6):"
         echo "wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl"
-        echo "pip3 install torch-1.10.0-cp36-cp36m-linux_aarch64.whl"
+        echo "python3 -m pip install torch-1.10.0-cp36-cp36m-linux_aarch64.whl --user"
     fi
 fi
 

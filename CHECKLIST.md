@@ -66,10 +66,12 @@ chmod +x build_jetson.sh
 ### 5. Install Python Dependencies
 
 ```bash
-pip3 install numpy --user
+python3 -m pip install numpy --user
 ```
 
 **Expected:** NumPy installed successfully
+
+**Note:** Use `python3 -m pip` instead of `pip3` to avoid wrapper warnings.
 
 ### 6. Test CartPole Module
 
@@ -117,7 +119,7 @@ Find the correct PyTorch wheel for your JetPack version:
 ```bash
 # Example for JetPack 4.6:
 wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch.whl
-pip3 install torch.whl --user
+python3 -m pip install torch.whl --user
 ```
 
 ### 10. Verify PyTorch with CUDA
@@ -237,15 +239,14 @@ You'll know everything is working when:
 
 **Remember:**
 - Always use `python3`, never `python`
-- Always use `pip3`, never `pip`
+- Always use `python3 -m pip`, not `pip3` or `pip` (avoids wrapper warnings)
 - Enable max performance before training
 - Monitor temperature during training
 - Training should complete in 3-10 minutes
 - Solved = average reward ≥ 475 for 100 episodes
 
 **Documentation:**
-- Quick start: `JETSON_QUICK_START.md` (start here!)
-- Detailed guide: `JETSON_NANO_GUIDE.md`
+- Setup guide: `JETSON_NANO_GUIDE.md`
 - This checklist: `CHECKLIST.md`
 
 **Good luck with your AI training!** 🚀🤖

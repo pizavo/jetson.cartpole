@@ -27,7 +27,7 @@ if command -v python3 &> /dev/null; then
     PY3_VERSION=$(python3 --version 2>&1)
     echo "✅ 'python3' command found: $PY3_VERSION"
     echo "   → USE THIS for all commands"
-    echo "   → Use 'python3' and 'pip3'"
+    echo "   → Use 'python3 -m pip' for package management"
 else
     echo "❌ 'python3' command NOT FOUND"
     echo "   → Install with: sudo apt-get install python3 python3-pip python3-dev"
@@ -40,6 +40,7 @@ echo ""
 if command -v pip3 &> /dev/null; then
     PIP3_VERSION=$(pip3 --version 2>&1)
     echo "✅ 'pip3' found: $PIP3_VERSION"
+    echo "   → Prefer using: python3 -m pip (avoids wrapper warnings)"
 else
     echo "❌ 'pip3' not found"
     echo "   → Install with: sudo apt-get install python3-pip"
@@ -54,13 +55,14 @@ echo "CORRECT commands to use:"
 echo "  python3 --version"
 echo "  python3 train_ai.py"
 echo "  python3 train_dqn.py"
-echo "  pip3 install numpy"
-echo "  pip3 install torch"
+echo "  python3 -m pip install numpy --user"
+echo "  python3 -m pip list"
 echo ""
 echo "WRONG commands (DO NOT USE):"
 echo "  python --version    ❌"
 echo "  python train_ai.py  ❌"
 echo "  pip install numpy   ❌"
+echo "  pip3 install numpy  ⚠️  (works but may show warnings)"
 echo ""
 
 # Check if in cartpole directory

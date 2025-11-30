@@ -139,10 +139,10 @@ sudo apt-get install -y python3 python3-pip python3-dev
 sudo apt-get install -y python3-pip python3-dev
 
 # Upgrade pip (use --user to avoid permission issues)
-pip3 install --upgrade pip --user
+python3 -m pip install --upgrade pip --user
 
 # Install NumPy
-pip3 install numpy --user
+python3 -m pip install numpy --user
 ```
 
 ### 3. Verify Python Environment
@@ -185,11 +185,11 @@ PyTorch requires special builds for Jetson:
 wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 
 # Install PyTorch
-pip3 install torch-1.10.0-cp36-cp36m-linux_aarch64.whl
+python3 -m pip install torch-1.10.0-cp36-cp36m-linux_aarch64.whl --user
 
 # Install torchvision (optional, for vision tasks)
 sudo apt-get install -y libopenblas-base libopenmpi-dev
-pip3 install torchvision
+python3 -m pip install torchvision --user
 ```
 
 **Note:** PyTorch versions vary by JetPack version. Check NVIDIA forums for the correct wheel:
@@ -359,6 +359,16 @@ hidden_size = 32
 python3 -c "import torch; print(torch.cuda.is_available())"
 
 # If False, reinstall PyTorch for correct JetPack version
+```
+
+**Problem:** pip wrapper warning
+```
+WARNING: pip is being invoked by an old script wrapper...
+```
+```bash
+# Solution: Use python3 -m pip instead of pip3
+python3 -m pip install numpy --user
+python3 -m pip list
 ```
 
 ### Performance Issues

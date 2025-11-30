@@ -5,8 +5,7 @@ A high-performance CartPole game implementation in Rust with Python bindings for
 ## 🚀 Quick Start
 
 - **Playing the game**: `cargo run --release` (Windows/Linux)
-- **Jetson Nano setup**: See **[JETSON_QUICK_START.md](JETSON_QUICK_START.md)** ⭐
-- **Detailed Jetson guide**: See **[JETSON_NANO_GUIDE.md](JETSON_NANO_GUIDE.md)**
+- **Jetson Nano setup**: See **[JETSON_NANO_GUIDE.md](JETSON_NANO_GUIDE.md)** ⭐
 
 ## ⚠️ Important: Python Version on Jetson Nano
 
@@ -14,7 +13,9 @@ A high-performance CartPole game implementation in Rust with Python bindings for
 - ❌ `python` → Python 2.7 (DON'T USE - too old)
 - ✅ `python3` → Python 3.6+ (USE THIS for all commands)
 
-**Always use `python3` and `pip3` on Jetson Nano!**
+**Always use `python3` and `python3 -m pip` on Jetson Nano!**
+
+**Note:** Use `python3 -m pip` instead of `pip3` to avoid wrapper warnings.
 
 ## Features
 
