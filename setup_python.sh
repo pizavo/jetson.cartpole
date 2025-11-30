@@ -52,6 +52,7 @@ echo "=========================================="
 
 # Set up Python user base for microSD
 export PYTHONUSERBASE="/mnt/microsd/python-packages"
+export PATH="$PYTHONUSERBASE/bin:$PATH"
 mkdir -p "$PYTHONUSERBASE"
 echo "✓ Python packages will install to: $PYTHONUSERBASE"
 

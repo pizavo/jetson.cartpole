@@ -11,7 +11,7 @@ export PYTHONUSERBASE="/mnt/microsd/python-packages"
 export PYO3_PYTHON=$(which python3.8 || which python3)
 
 # Add to PATH
-export PATH="$CARGO_HOME/bin:$PATH"
+export PATH="$PYTHONUSERBASE/bin:$CARGO_HOME/bin:$PATH"
 export PYTHONPATH="$PYTHONUSERBASE/lib/python3.8/site-packages:$PYTHONPATH"
 
 echo "Environment configured for microSD installation:"
