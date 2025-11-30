@@ -32,6 +32,14 @@ echo ""
 if command -v python3 &> /dev/null; then
     PYTHON_VERSION=$(python3 --version)
     echo "✓ Python found: $PYTHON_VERSION"
+
+    # Check Python version (need to extract version number)
+    PY_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+    echo "  Python version: $PY_VERSION"
+
+    if [[ "$PY_VERSION" == "3.6" ]]; then
+        echo "  ⚠ Python 3.6 detected - using PyO3 0.20.3 (last version supporting 3.6)"
+    fi
 else
     echo "✗ Error: Python3 not found"
     echo "  Please install: sudo apt-get install python3 python3-dev"

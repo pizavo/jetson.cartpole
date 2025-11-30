@@ -241,6 +241,12 @@ sudo tegrastats
 - [ ] Retry NumPy: `python3 -m pip install --user numpy --no-cache-dir`
 - [ ] OR use system NumPy (already available via apt)
 
+### Build Fails: "Python interpreter version (3.6) is lower than PyO3's minimum"
+
+- [ ] Verify Cargo.toml has `pyo3 = { version = "0.20.3", ...}` (NOT 0.21+)
+- [ ] PyO3 0.20.3 is the last version supporting Python 3.6
+- [ ] If wrong version, edit Cargo.toml and run `cargo clean` then rebuild
+
 ## Success Criteria
 
 You'll know everything is working when:

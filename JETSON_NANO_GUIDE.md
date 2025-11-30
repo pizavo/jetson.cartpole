@@ -77,6 +77,16 @@ rustc --version
 cargo --version
 ```
 
+## Important: Python Version Compatibility
+
+**⚠️ Jetson Nano ships with Python 3.6**
+
+This project uses PyO3 0.20.3 which is the last version to support Python 3.6. 
+- PyO3 0.21+ requires Python 3.7+
+- If you see "Python interpreter version (3.6) is lower than PyO3's minimum supported version (3.7)", the Cargo.toml has the wrong PyO3 version
+
+The current configuration is optimized for Jetson Nano's Python 3.6.
+
 ## Building CartPole
 
 ### 1. Transfer Files to Jetson
