@@ -1,6 +1,12 @@
 #!/bin/bash
 # Build script for Jetson Nano deployment
 
+# Force PyO3 to use Python 3.8 (not 3.6)
+if command -v python3.8 &> /dev/null; then
+    export PYO3_PYTHON=$(which python3.8)
+    export PYTHONPATH="/mnt/microsd/python-packages/lib/python3.8/site-packages:$PYTHONPATH"
+fi
+
 echo "=========================================="
 echo "CartPole - Jetson Nano Build Script"
 echo "=========================================="
@@ -48,6 +54,18 @@ if command -v python3 &> /dev/null; then
     fi
 
     echo "  ✓ Python version compatible with PyO3 0.27.2"
+
+    # Check python3-config (what PyO3 actually uses)
+    if command -v python3-config &> /dev/null; then
+        PY_CONFIG_VERSION=$(python3-config --prefix | xargs -I {} {}/bin/python3 --version 2>&1 || echo "unknown")
+        echo "  Note: python3-config points to: $PY_CONFIG_VERSION"
+    fi
+
+    # Force PyO3 to use python3.8
+    if command -v python3.8 &> /dev/null; then
+        export PYO3_PYTHON=$(which python3.8)
+        echo "  ✓ PYO3_PYTHON set to: $PYO3_PYTHON"
+    fi
 else
     echo "✗ Error: Python3 not found"
     echo "  Please install: sudo apt-get install python3 python3-dev"
