@@ -26,6 +26,19 @@ echo ""
 if command -v python3 &> /dev/null; then
     PY3_VERSION=$(python3 --version 2>&1)
     echo "✅ 'python3' command found: $PY3_VERSION"
+
+    # Check if version is 3.7+
+    PY_MAJOR=$(python3 -c "import sys; print(sys.version_info.major)" 2>/dev/null)
+    PY_MINOR=$(python3 -c "import sys; print(sys.version_info.minor)" 2>/dev/null)
+
+    if [[ "$PY_MAJOR" -eq 3 ]] && [[ "$PY_MINOR" -ge 7 ]]; then
+        echo "   ✓ Python $PY_MAJOR.$PY_MINOR is compatible with PyO3 0.27.2"
+    elif [[ "$PY_MAJOR" -eq 3 ]] && [[ "$PY_MINOR" -lt 7 ]]; then
+        echo "   ⚠ WARNING: Python $PY_MAJOR.$PY_MINOR is too old for PyO3 0.27.2"
+        echo "   → Requires Python 3.7+ (recommended: 3.8+)"
+        echo "   → Build will fail unless Python is upgraded"
+    fi
+
     echo "   → USE THIS for all commands"
     echo "   → Use 'python3 -m pip' for package management"
 else

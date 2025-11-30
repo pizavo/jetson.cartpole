@@ -17,16 +17,18 @@ Use this checklist when setting up CartPole on your Jetson Nano.
 ### 1. Verify Python Version
 
 ```bash
-cd ~/cartpole
+cd /mnt/microsd/projects/jetson.cartpole
 chmod +x check_python.sh
 ./check_python.sh
+
+# Verify Python 3.8+
+python3 --version
 ```
 
 **Expected output:**
-- ✅ Python 3.6+ found
-- ✅ pip3 found
+- ✅ Python 3.8+ found (required for PyO3 0.27.2)
 
-**Action:** Always use `python3` and `pip3` commands!
+**Action:** Always use `python3 -m pip` for package management!
 
 ### 2. Install Rust (if needed)
 
@@ -241,11 +243,12 @@ sudo tegrastats
 - [ ] Retry NumPy: `python3 -m pip install --user numpy --no-cache-dir`
 - [ ] OR use system NumPy (already available via apt)
 
-### Build Fails: "Python interpreter version (3.6) is lower than PyO3's minimum"
+### Build Fails: "Python interpreter version is lower than PyO3's minimum"
 
-- [ ] Verify Cargo.toml has `pyo3 = { version = "0.20.3", ...}` (NOT 0.21+)
-- [ ] PyO3 0.20.3 is the last version supporting Python 3.6
-- [ ] If wrong version, edit Cargo.toml and run `cargo clean` then rebuild
+- [ ] Check Python version: `python3 --version` (need 3.7+)
+- [ ] PyO3 0.27.2 requires Python 3.7 or newer
+- [ ] If Python 3.6, upgrade to Python 3.8+
+- [ ] Verify: `python3 -c "import sys; print(sys.version_info)"`
 
 ## Success Criteria
 

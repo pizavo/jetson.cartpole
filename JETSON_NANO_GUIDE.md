@@ -79,13 +79,13 @@ cargo --version
 
 ## Important: Python Version Compatibility
 
-**⚠️ Jetson Nano ships with Python 3.6**
+**✅ Python 3.8 Required**
 
-This project uses PyO3 0.20.3 which is the last version to support Python 3.6. 
-- PyO3 0.21+ requires Python 3.7+
-- If you see "Python interpreter version (3.6) is lower than PyO3's minimum supported version (3.7)", the Cargo.toml has the wrong PyO3 version
+This project uses PyO3 0.27.2 which requires Python 3.7+.
+- If using stock Jetson Nano (Python 3.6), you must upgrade Python to 3.8+
+- PyO3 0.27.2 supports Python 3.7, 3.8, 3.9, 3.10, 3.11, 3.12+
 
-The current configuration is optimized for Jetson Nano's Python 3.6.
+The current configuration requires Python 3.8 or newer.
 
 ## Building CartPole
 
