@@ -155,7 +155,7 @@ python3 train_ai.py
 
 **Duration:** ~30-60 seconds for 100 episodes
 
-### 12. Train DQN Agent (GPU accelerated)
+### 13. Train DQN Agent (GPU accelerated)
 
 First, enable max performance:
 

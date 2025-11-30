@@ -105,12 +105,13 @@ echo "Would you like to install Python dependencies for AI training? (y/n)"
 read -r response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo ""
-    echo "Installing Python dependencies..."
-    python3 -m pip install numpy --user
+    echo "Installing Python dependencies to $PYTHONUSERBASE..."
+    mkdir -p "$PYTHONUSERBASE"
+    python3 -m pip install --user numpy
 
     echo ""
     echo "Would you like to install PyTorch for Jetson? (y/n)"
-    echo "(This will download ~500MB)"
+    echo "(This will download ~500MB to microSD)"
     read -r pytorch_response
     if [[ "$pytorch_response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         echo "Please follow NVIDIA's official guide for PyTorch on Jetson:"
@@ -118,7 +119,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         echo ""
         echo "Quick install (for JetPack 4.6):"
         echo "wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl"
-        echo "python3 -m pip install torch-1.10.0-cp36-cp36m-linux_aarch64.whl --user"
+        echo "python3 -m pip install --user torch-1.10.0-cp36-cp36m-linux_aarch64.whl"
     fi
 fi
 

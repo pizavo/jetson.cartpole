@@ -46,12 +46,33 @@ sudo apt-get install -y build-essential git curl wget
 
 ### 3. Install Rust
 
+**⚠️ IMPORTANT: For Jetson Nano with limited eMMC space:**
+
+If your eMMC is tight, install Rust to microSD card instead:
+
 ```bash
-# Install Rust toolchain
+# Install to microSD (recommended for space-constrained systems)
+cd /mnt/microsd/projects/jetson.cartpole
+chmod +x install_rust_microsd.sh
+./install_rust_microsd.sh
+
+# Add to ~/.bashrc (copy the lines shown by the script)
+echo 'export CARGO_HOME="/mnt/microsd/cargo"' >> ~/.bashrc
+echo 'export RUSTUP_HOME="/mnt/microsd/rustup"' >> ~/.bashrc
+echo 'export PATH="$CARGO_HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**OR** for standard installation to home directory:
+
+```bash
+# Install Rust toolchain (requires ~2GB in home directory)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
+```
 
-# Verify installation
+Verify installation:
+```bash
 rustc --version
 cargo --version
 ```
@@ -134,6 +155,25 @@ sudo apt-get install -y python3 python3-pip python3-dev
 
 ### 2. Install Python Dependencies
 
+**⚠️ For microSD installation (saves eMMC space):**
+
+```bash
+# Set custom Python package location
+export PYTHONUSERBASE="/mnt/microsd/python-packages"
+export PYTHONPATH="$PYTHONUSERBASE/lib/python3.6/site-packages:$PYTHONPATH"
+mkdir -p "$PYTHONUSERBASE"
+
+# Add to ~/.bashrc to make permanent
+echo 'export PYTHONUSERBASE="/mnt/microsd/python-packages"' >> ~/.bashrc
+echo 'export PYTHONPATH="$PYTHONUSERBASE/lib/python3.6/site-packages:$PYTHONPATH"' >> ~/.bashrc
+
+# Install packages
+python3 -m pip install --user --upgrade pip
+python3 -m pip install --user numpy
+```
+
+**OR** for standard installation:
+
 ```bash
 # Install pip for Python 3
 sudo apt-get install -y python3-pip python3-dev
@@ -144,6 +184,8 @@ python3 -m pip install --upgrade pip --user
 # Install NumPy
 python3 -m pip install numpy --user
 ```
+
+**Note:** Use `python3 -m pip` instead of `pip3` to avoid wrapper issues.
 
 ### 3. Verify Python Environment
 
