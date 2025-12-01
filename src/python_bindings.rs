@@ -73,7 +73,7 @@ impl PyCartPole {
 /// Python module
 #[cfg(feature = "python")]
 #[pymodule]
-fn cartpole(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn cartpole(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyCartPole>()?;
     Ok(())
 }
