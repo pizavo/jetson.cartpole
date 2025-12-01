@@ -83,7 +83,7 @@ if [ "$WRONG_WHEEL" = "true" ]; then
             unset PYTHONPATH
 
             cd /mnt/microsd
-            python3.6 -m pip install --user torch-1.10.0-cp36-cp36m-linux_aarch64.whl
+            python3.6 -m pip install --user /mnt/microsd/torch-1.10.0-cp36-cp36m-linux_aarch64.whl
             python3.6 -m pip install --user numpy typing-extensions
 
             # Create Python 3.6 environment script
