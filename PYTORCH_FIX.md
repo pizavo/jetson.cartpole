@@ -96,21 +96,60 @@ This way:
 ## Test After Fix
 
 ```bash
-# Activate Python 3.8 environment
+# The fix script automatically tests PyTorch
+# If it passed, you're good to go!
+
+# Manual test if needed:
+
+# 1. Start fresh terminal
 source ~/use_python38.sh
 
-# Go to home directory (away from any torch folders)
+# 2. Go to home directory (important!)
 cd ~
 
-# Test PyTorch
+# 3. Test imports
+python3.8 -c "import numpy; print('NumPy:', numpy.__version__)"
 python3.8 -c "import torch; print('PyTorch:', torch.__version__)"
+python3.8 -c "import torch; print('CUDA:', torch.cuda.is_available())"
 
-# Test CartPole
+# 4. Test CartPole
 cd /mnt/microsd/projects/jetson.cartpole
 python3.8 -c "import cartpole; env = cartpole.PyCartPole(); print('CartPole: OK')"
 
-# Run training
+# 5. Run training
 python3.8 train_ai.py
+python3.8 test_setup.py
+```
+
+## Common Issues After Fix
+
+**If PYTHONPATH still shows duplicates:**
+```bash
+# Check your .bashrc
+grep PYTHONPATH ~/.bashrc
+
+# If found, remove them:
+sed -i '/PYTHONPATH/d' ~/.bashrc
+source ~/.bashrc
+
+# Re-source clean environment
+source ~/use_python38.sh
+echo $PYTHONPATH  # Should show only one path now
+```
+
+**If PyTorch still fails:**
+```bash
+# Check what's in the torch directory
+ls -la /mnt/microsd/python-packages/lib/python3.8/site-packages/torch/
+
+# Should have:
+# - __init__.py
+# - _C.cpython-38-aarch64-linux-gnu.so (critical!)
+# - lib/ directory with .so files
+
+# If _C.*.so is missing, reinstall:
+cd /mnt/microsd
+./fix_pytorch_complete.sh
 ```
 
 ## Optional: Remove Python 2.7
