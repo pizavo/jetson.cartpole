@@ -65,7 +65,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 
     # Install system packages first (provides optimized binaries)
     echo "Installing system Python packages..."
-    sudo apt-get install -y python3.8-dev libopenblas-base libopenmpi-dev
+    sudo apt-get install -y python3-dev libopenblas-base libopenmpi-dev
 
     # Install NumPy
     echo ""
