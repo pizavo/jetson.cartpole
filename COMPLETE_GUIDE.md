@@ -337,11 +337,48 @@ epsilon_decay = 0.995   # Exploration decay rate
 replay_buffer_size = 10000  # Past experiences stored
 ```
 
-### 5. Save and Load Models
+### 5. Compare Training Results
+
+After training both agents, compare their performance:
+
+```bash
+# Compare simple vs DQN agents
+python3.6 compare_training.py
+```
+
+**Expected Output:**
+```
+============================================================
+Comparing AI Performance
+============================================================
+
+Testing simple baseline agent...
+Simple Agent: 178.4 average reward
+
+Testing trained DQN agent...
+DQN Agent:    201.5 average reward
+
+============================================================
+✓ DQN is 12.9% better than baseline!
+============================================================
+```
+
+**What This Means:**
+- **Simple agent (~170-180):** Uses basic heuristic (lean opposite to pole angle)
+- **Good DQN (195+):** Learned optimal policy, solves the task
+- **Bad DQN (<100):** Not learning, needs more training or tuning
+
+**Your Results:**
+- Simple agent: **178.4** ✓ Good baseline
+- DQN agent: **83.4** ✗ Needs improvement
+
+This means your DQN needs more training or better hyperparameters. The improved version with reward shaping should help!
+
+### 6. Save and Load Models
 
 ```bash
 # Models are automatically saved after training
-ls -lh dqn_cartpole.pth
+ls -lh cartpole_dqn.pth
 
 # Load and test a trained model
 python3.6 << 'EOF'
@@ -742,8 +779,12 @@ sudo nvpmodel -m 0            # Max performance
 sudo jetson_clocks            # Max clocks
 sudo tegrastats               # Monitor
 
-# PyTorch verification
-python3.6 -c "import torch; print(torch.cuda.is_available())"
+# PyTorch CUDA verification (most important!)
+python3.6 -c "import torch; print('CUDA:', torch.cuda.is_available())"
+# If True, GPU acceleration works! You're ready to train.
+
+# Optional: CUDA compiler check (not needed for training)
+nvcc --version || echo "nvcc not in PATH (that's OK)"
 ```
 
 ### File Structure

@@ -5,12 +5,11 @@ This demonstrates how to use the Rust CartPole environment from Python.
 """
 
 import numpy as np
-import sys
-import os
 
 # Try to import the Rust CartPole module (when built with python feature)
 try:
     import cartpole
+
     USING_RUST = True
     print("Using Rust implementation of CartPole")
 except ImportError:
@@ -117,9 +116,9 @@ if __name__ == "__main__":
         test_environment()
         train_simple_agent(episodes=50)
     else:
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("To use this script, you need to build the Rust module:")
-        print("="*60)
+        print("=" * 60)
         print("\nOn Windows:")
         print("  1. Ensure Python is in your PATH")
         print("  2. Run: cargo build --release --features python")
@@ -130,5 +129,4 @@ if __name__ == "__main__":
         print("  2. Run: cargo build --release --features python")
         print("  3. Copy target/release/libcartpole.so to cartpole.so")
         print("\nThen run this script again!")
-        print("="*60)
-
+        print("=" * 60)

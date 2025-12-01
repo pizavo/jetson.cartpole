@@ -3,18 +3,19 @@
 Performance test and CUDA verification script for Jetson Nano
 """
 
-import time
 import sys
+import time
 
-print("="*70)
+print("=" * 70)
 print("CartPole Performance Test and CUDA Verification")
-print("="*70)
+print("=" * 70)
 print()
 
 # Test 1: Check CartPole module
 print("1. Testing CartPole Module...")
 try:
     import cartpole
+
     print("   ✓ CartPole module imported successfully")
 
     env = cartpole.PyCartPole()
@@ -40,6 +41,7 @@ print()
 print("2. Testing PyTorch...")
 try:
     import torch
+
     print(f"   ✓ PyTorch version: {torch.__version__}")
 
     # Test CUDA availability
@@ -67,6 +69,7 @@ print()
 print("3. Testing NumPy...")
 try:
     import numpy as np
+
     print(f"   ✓ NumPy version: {np.__version__}")
 except ImportError:
     print("   ✗ NumPy not installed")
@@ -112,6 +115,7 @@ print()
 # Test 5: GPU Benchmark (if available)
 try:
     import torch
+
     if torch.cuda.is_available():
         print("5. Benchmarking GPU Performance...")
 
@@ -164,6 +168,7 @@ except Exception as e:
 print("6. System Information...")
 try:
     import platform
+
     print(f"   • Platform: {platform.system()} {platform.release()}")
     print(f"   • Architecture: {platform.machine()}")
     print(f"   • Python: {platform.python_version()}")
@@ -180,9 +185,9 @@ except Exception as e:
     print(f"   ⚠ Could not get system info: {e}")
 
 print()
-print("="*70)
+print("=" * 70)
 print("Test Complete!")
-print("="*70)
+print("=" * 70)
 print()
 
 # Summary
@@ -208,4 +213,3 @@ else:
     print("  Install PyTorch: see JETSON_NANO_GUIDE.md")
 
 print()
-

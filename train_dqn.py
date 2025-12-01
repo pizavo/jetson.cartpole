@@ -4,15 +4,17 @@ Advanced AI training example using Deep Q-Learning (DQN).
 This demonstrates GPU-accelerated training on Jetson Nano.
 """
 
-import numpy as np
 import random
 from collections import deque
+
+import numpy as np
 
 # Try to import PyTorch
 try:
     import torch
     import torch.nn as nn
     import torch.optim as optim
+
     HAS_PYTORCH = True
 except ImportError:
     HAS_PYTORCH = False
@@ -22,6 +24,7 @@ except ImportError:
 # Import CartPole
 try:
     import cartpole
+
     HAS_CARTPOLE = True
 except ImportError:
     HAS_CARTPOLE = False
@@ -75,12 +78,12 @@ class DQNAgent:
         self.state_size = 4
         self.action_size = 2
 
-        # Hyperparameters
+        # Hyperparameters (tuned for better learning)
         self.gamma = 0.99  # Discount factor
         self.epsilon = 1.0  # Exploration rate
-        self.epsilon_min = 0.01
-        self.epsilon_decay = 0.995
-        self.learning_rate = 0.001
+        self.epsilon_min = 0.05  # Keep exploring more
+        self.epsilon_decay = 0.998  # Decay slower
+        self.learning_rate = 0.0005  # Reduced for stability
         self.batch_size = 64
 
         # Networks
@@ -148,24 +151,29 @@ class DQNAgent:
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
 
-def train_dqn(episodes=500, render_interval=50):
-    """Train DQN agent on CartPole"""
+def train_dqn(episodes=500, train_freq=4):
+    """Train DQN agent on CartPole
+
+    Args:
+        episodes: Number of episodes to train
+        train_freq: Train every N steps (higher = faster but less stable)
+    """
 
     if not HAS_PYTORCH or not HAS_CARTPOLE:
         print("\nMissing dependencies. Cannot run training.")
-        return
+        return None
 
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Training DQN Agent on CartPole")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Device: {device}")
     if device.type == "cuda":
         print(f"GPU: {torch.cuda.get_device_name(0)}")
         print(f"CUDA Version: {torch.version.cuda}")
     print(f"Episodes: {episodes}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     # Create environment and agent
     env = cartpole.PyCartPole()
@@ -174,6 +182,10 @@ def train_dqn(episodes=500, render_interval=50):
     # Training metrics
     episode_rewards = []
     losses = []
+
+    # Timing
+    import time
+    start_time = time.time()
 
     # Training loop
     for episode in range(episodes):
@@ -188,16 +200,34 @@ def train_dqn(episodes=500, render_interval=50):
             action = agent.select_action(state)
             next_state, reward, done = env.step(action)
 
-            # Store transition
-            agent.memory.push(state, action, reward, next_state, float(done))
+            # Reward shaping: encourage staying upright and centered
+            # state = [x, x_dot, theta, theta_dot]
+            x, x_dot, theta, theta_dot = next_state
 
-            # Train
-            loss = agent.train_step()
-            if loss is not None:
-                episode_loss.append(loss)
+            # Penalty for being far from center
+            distance_penalty = abs(x) * 0.1
+
+            # Penalty for large angle
+            angle_penalty = abs(theta) * 2.0
+
+            # Shaped reward
+            shaped_reward = reward - distance_penalty - angle_penalty
+
+            # Big penalty for failure
+            if done:
+                shaped_reward = -10.0
+
+            # Store transition with shaped reward
+            agent.memory.push(state, action, shaped_reward, next_state, float(done))
+
+            # Train every train_freq steps (faster training)
+            if steps % train_freq == 0:
+                loss = agent.train_step()
+                if loss is not None:
+                    episode_loss.append(loss)
 
             state = next_state
-            total_reward += reward
+            total_reward += reward  # Track original reward
             steps += 1
 
         # Update target network
@@ -214,33 +244,44 @@ def train_dqn(episodes=500, render_interval=50):
 
         # Print progress
         if (episode + 1) % 10 == 0:
+            elapsed = time.time() - start_time
+            eps_per_sec = (episode + 1) / elapsed
+            eta_seconds = (episodes - episode - 1) / eps_per_sec if eps_per_sec > 0 else 0
+
             avg_reward = np.mean(episode_rewards[-10:])
             avg_loss = np.mean(losses[-10:]) if losses else 0
             print(f"Episode {episode + 1:4d} | "
                   f"Reward: {total_reward:6.1f} | "
                   f"Avg (10): {avg_reward:6.1f} | "
                   f"Loss: {avg_loss:7.4f} | "
-                  f"Epsilon: {agent.epsilon:.3f}")
+                  f"Epsilon: {agent.epsilon:.3f} | "
+                  f"Speed: {eps_per_sec:.1f} eps/s | "
+                  f"ETA: {int(eta_seconds)}s")
 
         # Check if solved
         if len(episode_rewards) >= 100:
             avg_100 = np.mean(episode_rewards[-100:])
             if avg_100 >= 195:
-                print(f"\n{'='*60}")
+                print(f"\n{'=' * 60}")
                 print(f"Solved in {episode + 1} episodes!")
                 print(f"Average reward over last 100 episodes: {avg_100:.1f}")
-                print(f"{'='*60}\n")
+                print(f"{'=' * 60}\n")
                 break
 
     # Final statistics
-    print(f"\n{'='*60}")
+    total_time = time.time() - start_time
+    avg_eps_per_sec = len(episode_rewards) / total_time
+
+    print(f"\n{'=' * 60}")
     print(f"Training Complete!")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Total episodes: {len(episode_rewards)}")
+    print(f"Training time: {int(total_time)}s ({int(total_time / 60)}m {int(total_time % 60)}s)")
+    print(f"Speed: {avg_eps_per_sec:.1f} episodes/second")
     print(f"Average reward (last 100): {np.mean(episode_rewards[-100:]):.1f}")
     print(f"Best episode: {max(episode_rewards):.1f}")
     print(f"Final epsilon: {agent.epsilon:.3f}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     # Save model
     print("Saving model...")
@@ -265,9 +306,9 @@ def test_trained_agent(model_path="cartpole_dqn.pth", episodes=10):
     agent.policy_net.eval()
     agent.epsilon = 0  # No exploration
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Testing Trained Agent")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     env = cartpole.PyCartPole()
     rewards = []
@@ -287,9 +328,9 @@ def test_trained_agent(model_path="cartpole_dqn.pth", episodes=10):
         rewards.append(total_reward)
         print(f"Episode {episode + 1}: {total_reward:.1f} reward, {steps} steps")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Average reward: {np.mean(rewards):.1f}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
 
 if __name__ == "__main__":
@@ -312,4 +353,3 @@ if __name__ == "__main__":
     # Test the trained agent
     print("\nTesting trained agent...")
     test_trained_agent(episodes=5)
-
