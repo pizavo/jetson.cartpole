@@ -59,22 +59,45 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 
     # Install system packages first (provides optimized binaries)
     echo "Installing system Python packages..."
-    sudo apt-get install -y python3-dev libopenblas-base libopenmpi-dev libblas-dev
+    sudo apt-get install -y python3-numpy python3-dev libopenblas-base libopenmpi-dev libblas-dev
 
-    # Install NumPy
+    # Check if system NumPy works
     echo ""
-    echo "Installing NumPy..."
-    $PYTHON_CMD -m pip install --user --ignore-installed numpy
-
-    if [ $? -eq 0 ]; then
-        echo "✓ NumPy installed successfully"
-
-        # Verify NumPy
-        $PYTHON_CMD -c "import numpy; print('  NumPy version:', numpy.__version__)"
+    echo "Checking system NumPy..."
+    if $PYTHON_CMD -c "import numpy; print('System NumPy:', numpy.__version__)" 2>/dev/null; then
+        echo "✓ Using system NumPy (optimized for Jetson)"
+        echo "  Location: /usr/lib/python3/dist-packages"
+        echo ""
+        echo "Note: System NumPy is recommended for Jetson Nano"
+        echo "      It's pre-compiled and optimized by NVIDIA"
     else
-        echo "⚠ NumPy installation failed, trying with Cython..."
-        $PYTHON_CMD -m pip install --user Cython
-        $PYTHON_CMD -m pip install --user --no-cache-dir numpy
+        # Try installing user NumPy with specific version that has wheels
+        echo "System NumPy not found, installing user NumPy..."
+        echo ""
+
+        # Try NumPy 1.19.2 which has better wheel support for Python 3.6
+        echo "Attempting NumPy 1.19.2 (has pre-built wheels)..."
+        $PYTHON_CMD -m pip install --user "numpy==1.19.2" 2>/dev/null
+
+        if [ $? -eq 0 ]; then
+            echo "✓ NumPy 1.19.2 installed successfully"
+            $PYTHON_CMD -c "import numpy; print('  NumPy version:', numpy.__version__)"
+        else
+            # Last resort: try latest numpy with binary install only
+            echo "Trying latest NumPy (binary only, no build)..."
+            $PYTHON_CMD -m pip install --user --only-binary :all: numpy 2>/dev/null
+
+            if [ $? -eq 0 ]; then
+                echo "✓ NumPy installed successfully"
+                $PYTHON_CMD -c "import numpy; print('  NumPy version:', numpy.__version__)"
+            else
+                echo "✗ NumPy installation failed"
+                echo ""
+                echo "Recommendation: Use system NumPy instead"
+                echo "  sudo apt-get install python3-numpy"
+                echo "  System NumPy is already available and works fine"
+            fi
+        fi
     fi
 
     # Test CartPole module
