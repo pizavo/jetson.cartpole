@@ -79,13 +79,14 @@ cargo --version
 
 ## Important: Python Version Compatibility
 
-**✅ Python 3.8 Required**
+**✅ Python 3.6 (Stock JetPack 4.6)**
 
-This project uses PyO3 0.27.2 which requires Python 3.7+.
-- If using stock Jetson Nano (Python 3.6), you must upgrade Python to 3.8+
-- PyO3 0.27.2 supports Python 3.7, 3.8, 3.9, 3.10, 3.11, 3.12+
+This project uses PyO3 0.16.6 which supports Python 3.6+.
+- Stock Jetson Nano with JetPack 4.6 comes with Python 3.6
+- PyTorch 1.10.0 wheels for JetPack 4.6 are compiled for Python 3.6
+- PyO3 0.16.6 fully supports Python 3.6
 
-The current configuration requires Python 3.8 or newer.
+The current configuration is optimized for stock JetPack 4.6.
 
 ## Building CartPole
 
@@ -178,8 +179,8 @@ echo 'export PYTHONUSERBASE="/mnt/microsd/python-packages"' >> ~/.bashrc
 echo 'export PYTHONPATH="$PYTHONUSERBASE/lib/python3.6/site-packages:$PYTHONPATH"' >> ~/.bashrc
 
 # Install packages
-python3 -m pip install --user --upgrade pip
-python3 -m pip install --user numpy
+python3.6 -m pip install --user --upgrade pip
+python3.6 -m pip install --user numpy
 ```
 
 **OR** for standard installation:
@@ -422,9 +423,9 @@ python3 -c "import torch; print(torch.cuda.is_available())"
 WARNING: pip is being invoked by an old script wrapper...
 ```
 ```bash
-# Solution: Use python3 -m pip instead of pip3
-python3 -m pip install numpy --user
-python3 -m pip list
+# Solution: Use python3.6 -m pip instead of pip3
+python3.6 -m pip install numpy --user
+python3.6 -m pip list
 ```
 
 ### Performance Issues

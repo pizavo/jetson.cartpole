@@ -6,13 +6,13 @@ echo "CartPole - Rust Build"
 echo "=========================================="
 echo ""
 
-# Force PyO3 to use Python 3.8 (not 3.6)
-if command -v python3.8 &> /dev/null; then
-    export PYO3_PYTHON=$(which python3.8)
-    export PYTHONPATH="/mnt/microsd/python-packages/lib/python3.8/site-packages:$PYTHONPATH"
-    echo "✓ PYO3_PYTHON set to: $PYO3_PYTHON"
+# Use Python 3.6 (stock JetPack 4.6)
+if command -v python3.6 &> /dev/null; then
+    export PYO3_PYTHON=$(which python3.6)
+    export PYTHONPATH="/mnt/microsd/python-packages/lib/python3.6/site-packages:$PYTHONPATH"
+    echo "✓ PYO3_PYTHON set to: $PYO3_PYTHON (Python 3.6)"
 else
-    echo "⚠ Warning: python3.8 not found, using default python3"
+    echo "⚠ Warning: python3.6 not found, using default python3"
     if command -v python3 &> /dev/null; then
         export PYO3_PYTHON=$(which python3)
     fi

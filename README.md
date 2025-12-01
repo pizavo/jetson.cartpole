@@ -9,16 +9,16 @@ A high-performance CartPole game implementation in Rust with Python bindings for
 
 ## ⚠️ Important: Python Version on Jetson Nano
 
-**Python 3.8+ Required:**
+**Python 3.6 (Stock JetPack 4.6):**
 - ❌ `python` → Python 2.7 (DON'T USE - too old)
-- ✅ `python3` → Python 3.8+ (USE THIS for all commands)
+- ✅ `python3.6` → Python 3.6 (USE THIS for all commands)
 
-**Always use `python3` and `python3 -m pip` on Jetson Nano!**
+**Always use `python3.6` and `python3.6 -m pip` on Jetson Nano!**
 
 **Note:** 
-- Use `python3 -m pip` instead of `pip3` to avoid wrapper warnings
-- This project uses PyO3 0.27.2 which requires Python 3.7+
-- Stock Jetson Nano ships with Python 3.6 - upgrade to 3.8+ required
+- Use `python3.6 -m pip` instead of `pip3` to avoid wrapper warnings
+- This project uses PyO3 0.16.6 which supports Python 3.6
+- PyTorch 1.10.0 wheels for JetPack 4.6 are compiled for Python 3.6
 
 ## Features
 

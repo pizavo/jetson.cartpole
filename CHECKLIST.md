@@ -21,14 +21,14 @@ cd /mnt/microsd/projects/jetson.cartpole
 chmod +x check_python.sh
 ./check_python.sh
 
-# Verify Python 3.8+
-python3 --version
+# Verify Python 3.6
+python3.6 --version
 ```
 
 **Expected output:**
-- ✅ Python 3.8+ found (required for PyO3 0.27.2)
+- ✅ Python 3.6 found (required for PyO3 0.16.6)
 
-**Action:** Always use `python3 -m pip` for package management!
+**Action:** Always use `python3.6 -m pip` for package management!
 
 ### 2. Install Rust (if needed)
 
@@ -243,12 +243,12 @@ sudo tegrastats
 - [ ] Retry NumPy: `python3 -m pip install --user numpy --no-cache-dir`
 - [ ] OR use system NumPy (already available via apt)
 
-### Build Fails: "Python interpreter version is lower than PyO3's minimum"
+### Build Fails: Python Version Issues
 
-- [ ] Check Python version: `python3 --version` (need 3.7+)
-- [ ] PyO3 0.27.2 requires Python 3.7 or newer
-- [ ] If Python 3.6, upgrade to Python 3.8+
-- [ ] Verify: `python3 -c "import sys; print(sys.version_info)"`
+- [ ] Check Python version: `python3.6 --version` (should be 3.6.9)
+- [ ] PyO3 0.16.6 supports Python 3.6+
+- [ ] Verify Cargo.toml has: `pyo3 = { version = "0.16.6", ...}`
+- [ ] Set PYO3_PYTHON: `export PYO3_PYTHON=/usr/bin/python3.6`
 
 ## Success Criteria
 
