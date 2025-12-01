@@ -6,14 +6,9 @@ echo "CartPole - Python Setup"
 echo "=========================================="
 echo ""
 
-# Force Python 3.8
-if command -v python3.8 &> /dev/null; then
-    PYTHON_CMD="python3.8"
-    echo "✓ Using Python 3.8"
-else
-    PYTHON_CMD="python3"
-    echo "⚠ Python 3.8 not found, using default python3"
-fi
+# Use Python 3.6 (stock JetPack 4.6)
+PYTHON_CMD="python3.6"
+echo "✓ Using Python 3.6 (stock JetPack 4.6)"
 
 # Check Python version
 PYTHON_VERSION=$($PYTHON_CMD --version)
@@ -24,18 +19,17 @@ PY_MINOR=$($PYTHON_CMD -c "import sys; print(sys.version_info.minor)")
 PY_VERSION="$PY_MAJOR.$PY_MINOR"
 echo "  Python version: $PY_VERSION"
 
-# PyO3 0.27.2 requires Python 3.7+
-if [[ "$PY_MAJOR" -eq 3 ]] && [[ "$PY_MINOR" -lt 7 ]]; then
+# PyO3 0.15.2 supports Python 3.6+
+if [[ "$PY_MAJOR" -eq 3 ]] && [[ "$PY_MINOR" -lt 6 ]]; then
     echo "  ✗ Error: Python $PY_VERSION is too old"
-    echo "  PyO3 0.27.2 requires Python 3.7 or newer"
-    echo "  Please upgrade Python to 3.8+"
+    echo "  PyO3 0.15.2 requires Python 3.6 or newer"
     exit 1
 fi
 
-echo "  ✓ Python version compatible with PyO3 0.27.2"
+echo "  ✓ Python version $PY_VERSION compatible with PyO3 0.15.2"
 
 # Check for Python dev headers
-if command -v ${PYTHON_CMD}-config &> /dev/null; then
+if command -v python3-config &> /dev/null; then
     echo "✓ Python development headers found"
 elif pkg-config --exists python3; then
     echo "✓ Python development headers found"
@@ -43,7 +37,7 @@ else
     echo "⚠ Warning: Python development headers not found"
     echo "  Installing now..."
     sudo apt-get update
-    sudo apt-get install -y python3.8-dev python3-dev
+    sudo apt-get install -y python3-dev
 fi
 
 echo ""
@@ -65,7 +59,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 
     # Install system packages first (provides optimized binaries)
     echo "Installing system Python packages..."
-    sudo apt-get install -y python3-dev libopenblas-base libopenmpi-dev
+    sudo apt-get install -y python3-dev libopenblas-base libopenmpi-dev libblas-dev
 
     # Install NumPy
     echo ""
