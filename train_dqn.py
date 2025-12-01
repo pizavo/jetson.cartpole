@@ -348,7 +348,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # Train the agent
-    train_dqn(episodes=300)
+    train_dqn(episodes=500)
 
     # Test the trained agent
     print("\nTesting trained agent...")
